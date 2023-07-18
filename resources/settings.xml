@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <category label="Scrape Web API">
+        <setting id="scrapingant" type="text" label="Scrapingant API" default=""/>
+        <setting id="scrapingbee" type="text" label="Scrapingbee API" default=""/>
+        <setting id="zenscrape" type="text" label="Zenscrape API" default=""/>
+        <setting id="scraperapi" type="text" label="Scraperapi API" default=""/>
+        <setting id="api-select" type="select" label="选择API" values="scrapingant|scrapingbee|zenscrape|scraperapi" />
+    </category>
+    <category label="樱花动漫">
+        <setting id="yhdm" type="bool" label="启用" default="true"/>
+        <setting id="yhdm-url" type="text" label="域名" default="http://www.yinghuacd.com"/>
+    </category>
+    <category label="美剧天堂">
+        <setting id="meijutt" type="bool" label="启用" default="true"/>
+        <setting id="meijutt-url" type="text" label="域名" default="https://www.meijutt.tv"/>
+    </category>
+    <category label="动漫岛">
+        <setting id="dmd" type="bool" label="启用" default="true"/>
+        <setting id="dmd-url" type="text" label="域名" default="http://www.88dmw.com"/>
+    </category>
+    <category label="萝卜影视">
+        <setting id="lbbb" type="bool" label="启用" default="true"/>
+        <setting id="lbbb-url" type="text" label="域名" default="https://ys.lbbb.cc"/>
+    </category>
+</settings>
