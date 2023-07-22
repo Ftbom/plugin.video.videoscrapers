@@ -24,28 +24,35 @@ class Source():
         }
     
     def __home_parser(self) -> dict:
+        def get_results(soup, class_name):
+            results = []
+            for items in soup.find_all('div', class_ = class_name):
+                try:
+                    categroy = items.find('div', class_ = 'Title').b.get_text().encode("latin1").decode("gbk")
+                except:
+                    categroy = items.find('div', class_ = 'Title').b.get_text()
+                for item in items.find('div', class_ = "c2_contact").find_all('li'):
+                    try:
+                        title = item.a.img.attrs['alt'].encode("latin1").decode("gbk")
+                    except:
+                        title = item.a.img.attrs['alt']
+                    try:
+                        description = [fmt.color(item.find_all('p')[1].get_text().encode("latin1").decode("gbk"), 'orange'), fmt.italics(categroy)]
+                    except:
+                        description = [fmt.color(item.find_all('p')[1].get_text(), 'orange'), fmt.italics(categroy)]
+                    results.append({
+                        'title': title,
+                        'cover': item.a.img.attrs['src'],
+                        'id': item.a.attrs['href'].replace('/content/', '').replace('.html', ''),
+                        'description': description
+                    })
+            return results
         url = self.baseUrl
         res = requests.get(url, headers = self.headers)
         soup = BeautifulSoup(res.content, 'html.parser')
         results = []
-        for items in soup.find_all('div', class_ = "cn3_r"):
-            categroy = items.find('div', class_ = 'Title').b.get_text()
-            for item in items.find('div', class_ = "c2_contact").find_all('li'):
-                results.append({
-                    'title': item.a.img.attrs['alt'],
-                    'cover': item.a.img.attrs['src'],
-                    'id': item.a.attrs['href'].replace('/content/', '').replace('.html', ''),
-                    'description': [fmt.color(item.find_all('p')[1].get_text(), 'orange'), fmt.italics(categroy)]
-                })
-        for items in soup.find_all('div', class_ = "cn3_l"):
-            categroy = items.find('div', class_ = 'Title').b.get_text()
-            for item in items.find('div', class_ = "c2_contact").find_all('li'):
-                results.append({
-                    'title': item.a.img.attrs['alt'],
-                    'cover': item.a.img.attrs['src'],
-                    'id': item.a.attrs['href'].replace('/content/', '').replace('.html', ''),
-                    'description': [fmt.color(item.find_all('p')[1].get_text(), 'orange'), fmt.italics(categroy)]
-                })
+        results.extend(get_results(soup, "cn3_r"))
+        results.extend(get_results(soup, "cn3_l"))
         return {'cover_headers': self.headers, 'results': results}
     
     def __top_parser(self, id: str) -> dict:
@@ -56,12 +63,19 @@ class Source():
         for item in soup.find_all("div", class_ = "self_box"):
             description = []
             for info in item.find("ul", class_ = "self_con").find_all("li"):
-                description.append(info.get_text())
+                try:
+                    description.append(info.get_text().encode("latin1").decode("gbk"))
+                except:
+                    description.append(info.get_text())
             description[0] = fmt.italics(description[0])
             description[1] = fmt.color(description[1], "orange")
             other_info = item.find("div", class_ = "self_img")
+            try:
+                title = other_info.a.img.attrs['alt'].encode("latin1").decode("gbk")
+            except:
+                title = other_info.a.img.attrs['alt']
             results.append({
-                "title": other_info.a.img.attrs['alt'],
+                "title": title,
                 "cover": other_info.a.img.attrs['src'],
                 "id": other_info.a.attrs['href'].replace('/content/', '').replace('.html', ''),
                 "description": description
@@ -93,12 +107,19 @@ class Source():
         for item in soup.find_all("div", class_ = "cn_box2"):
             description = []
             for info in item.find("ul", class_ = "list_20").find_all("li"):
-                description.append(info.get_text())
+                try:
+                    description.append(info.get_text().encode("latin1").decode("gbk"))
+                except:
+                    description.append(info.get_text())
             description[0] = fmt.italics(description[0])
             description[1] = fmt.color(description[1], "orange")
             other_info = item.find("div", class_ = "bor_img3_right")
+            try:
+                title = other_info.a.img.attrs['alt'].encode("latin1").decode("gbk")
+            except:
+                title = other_info.a.img.attrs['alt']
             results.append({
-                "title": other_info.a.img.attrs['alt'],
+                "title": title,
                 "cover": other_info.a.img.attrs['src'],
                 "id": other_info.a.attrs['href'].replace('/content/', '').replace('.html', ''),
                 "description": description
@@ -115,12 +136,19 @@ class Source():
         for item in soup.find_all("div", class_ = "cn_box2"):
             description = []
             for info in item.find("ul", class_ = "list_20").find_all("li"):
-                description.append(info.get_text())
+                try:
+                    description.append(info.get_text().encode("latin1").decode("gbk"))
+                except:
+                    description.append(info.get_text())
             description[0] = fmt.italics(description[0])
             description[1] = fmt.color(description[1], "orange")
             other_info = item.find("div", class_ = "bor_img3_right")
+            try:
+                title = other_info.a.img.attrs['alt'].encode("latin1").decode("gbk")
+            except:
+                title = other_info.a.img.attrs['alt']
             results.append({
-                "title": other_info.a.img.attrs['alt'],
+                "title": title,
                 "cover": other_info.a.img.attrs['src'],
                 "id": other_info.a.attrs['href'].replace('/content/', '').replace('.html', ''),
                 "description": description
@@ -134,14 +162,25 @@ class Source():
         cover = soup.find('div', class_ = "o_big_img_bg_b").img.attrs['src']
         title = soup.find('div', class_ = "info-title")
         title = title.span.get_text() + title.h1.get_text()
+        try:
+            title = title.encode("latin1").decode("gbk")
+        except:
+            pass
         description = []
         for info in soup.find('div', class_ = 'o_r_contact').find_all('li'):
-            description.append(info.get_text())
+            try:
+                description.append(info.get_text().encode("latin1").decode("gbk"))
+            except:
+                description.append(info.get_text())
         description[0] = fmt.color(description[0], 'orange')
         results = []
         for item in soup.find('ul', class_ = 'mn_list_li_movie').find_all('li'):
+            try:
+                vol_title = item.a.attrs['title'].encode("latin1").decode("gbk")
+            except:
+                vol_title = item.a.attrs['title']
             results.append({
-                'title': item.a.attrs['title'],
+                'title': vol_title,
                 'id': item.a.attrs['href'].replace('/video/', '').replace('.html', '')
             })
         return {'cover': cover, 'cover_headers': self.headers,
